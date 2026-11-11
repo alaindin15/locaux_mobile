@@ -1,0 +1,13 @@
+نشر تطبيق الهاتف (مرة واحدة)
+===============================
+هذا المجلد يحتوي على البرنامج فقط (لا يحتوي على أي معطيات) : index.html و sw.js و manifest.webmanifest و الأيقونات.
+
+على GitHub Pages (مجاني) :
+ 1) انشئ حسابا على github.com ثم New repository (مثلا : employes) - Public.
+ 2) Add file > Upload files : ارفع كل ملفات هذا المجلد ثم Commit changes.
+ 3) Settings > Pages > Source : Deploy from a branch > main / (root) > Save.
+ 4) بعد دقيقة يظهر الرابط : https://اسمك.github.io/employes/
+ 5) على الهاتف : افتح الرابط في Chrome > القائمة > « تثبيت التطبيق » (Install app / Add to Home screen).
+ 6) في التطبيق : اضغط « اختيار الملف » و اختر ملف emp المصدّر من برنامج الحاسوب.
+
+للتحديث : صدّر ملف emp جديدا ثم في التطبيق « استيراد ملف بيانات جديد ». عند صدور نسخة جديدة من البرنامج : ارفع الملفات الجديدة بنفس الطريقة.

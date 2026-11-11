@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#1B3A57">
+<meta name="robots" content="noindex">
+<title>مصلحة الكتابة المركزية</title>
+<style>
+:root{--bg:#EEF2F6;--card:#fff;--ink:#1D2B38;--mute:#6B7C8C;--line:#DCE3EA;--pri:#1B3A57;--pri2:#2D6A9F;--ok:#2E9E5B;--warn:#E08A00;--bad:#C0392B;--chip:#E6EEF6}
+@media (prefers-color-scheme: dark){:root{--bg:#10171E;--card:#1A242E;--ink:#E7EDF3;--mute:#93A4B4;--line:#2A3846;--pri:#0E2236;--pri2:#5BA3E0;--chip:#223445}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:Tahoma,"Noto Sans Arabic","Segoe UI",Roboto,sans-serif;font-size:16px}
+button,input,select{font:inherit;color:inherit}
+.hide{display:none!important}
+#app{max-width:720px;margin:0 auto;min-height:100%;display:flex;flex-direction:column}
+.top{background:var(--pri);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
+.top h1{font-size:17px;margin:0;flex:1;font-weight:700}
+.top button{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:10px;padding:8px 12px;font-size:15px}
+.sub{font-size:12px;opacity:.8;font-weight:400}
+.pad{padding:14px 14px 90px}
+.lock{display:flex;flex-direction:column;justify-content:center;min-height:100vh;padding:24px}
+.box{background:var(--card);border-radius:18px;padding:22px 18px;box-shadow:0 2px 14px rgba(0,0,0,.08)}
+.box h2{margin:0 0 6px;font-size:20px}
+.box p{color:var(--mute);margin:6px 0 14px;line-height:1.7;font-size:14px}
+.inp{width:100%;border:1.5px solid var(--line);background:var(--bg);border-radius:12px;padding:14px;font-size:20px;text-align:center;letter-spacing:3px;direction:ltr}
+.inp:focus{outline:none;border-color:var(--pri2)}
+.btn{display:block;width:100%;border:0;border-radius:12px;background:var(--pri2);color:#fff;font-weight:700;padding:14px;margin-top:12px;font-size:17px}
+.btn.alt{background:transparent;color:var(--pri2);font-weight:600}
+.err{color:var(--bad);min-height:22px;margin-top:8px;font-size:14px;text-align:center}
+.note{font-size:13px;color:var(--mute);text-align:center;margin-top:10px}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;max-width:720px;margin:0 auto;z-index:6}
+.tabs button{flex:1;border:0;background:none;padding:10px 4px 12px;color:var(--mute);font-size:13px}
+.tabs button b{display:block;font-size:20px;margin-bottom:2px;font-weight:400}
+.tabs button.on{color:var(--pri2);font-weight:700}
+.search{display:flex;gap:8px;margin-bottom:10px}
+.search input,.search select{flex:1;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:11px 12px;min-width:0}
+.search select{flex:0 0 38%}
+.cnt{font-size:13px;color:var(--mute);margin:2px 4px 8px}
+.row{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:14px;padding:10px 12px;margin-bottom:8px;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.av{width:52px;height:52px;border-radius:50%;background:var(--chip);flex:0 0 auto;object-fit:cover;display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:22px;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover}
+.rt{flex:1;min-width:0}
+.rt .n{font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt .g{color:var(--mute);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--card);border-radius:14px;padding:12px 6px;text-align:center}
+.stat b{display:block;font-size:26px}
+.stat span{font-size:12px;color:var(--mute)}
+h3.t{margin:16px 4px 8px;font-size:15px;color:var(--pri2)}
+.hero{background:var(--card);border-radius:18px;padding:18px;text-align:center;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.hero .big{width:110px;height:110px;border-radius:50%;margin:0 auto 10px;background:var(--chip);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:44px;color:var(--mute)}
+.hero .big img{width:100%;height:100%;object-fit:cover}
+.hero h2{margin:4px 0;font-size:20px}
+.hero .g{color:var(--mute);font-size:14px}
+.badge{display:inline-block;border-radius:20px;padding:4px 12px;font-size:13px;margin-top:8px;color:#fff}
+.acts{display:flex;gap:8px;margin-top:12px}
+.acts a{flex:1;text-align:center;text-decoration:none;background:var(--chip);color:var(--pri2);border-radius:12px;padding:10px 4px;font-size:14px;font-weight:600}
+.sec{background:var(--card);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.sec h4{margin:0;padding:12px 14px;font-size:15px;background:var(--chip);color:var(--pri2)}
+.kv{display:flex;gap:10px;padding:9px 14px;border-top:1px solid var(--line);font-size:14.5px}
+.kv:first-of-type{border-top:0}
+.kv span{flex:0 0 40%;color:var(--mute)}
+.kv div{flex:1;white-space:pre-wrap;word-break:break-word}
+.lv{padding:10px 14px;border-top:1px solid var(--line);font-size:14px;line-height:1.7}
+.lv small{color:var(--mute)}
+.bal{padding:12px 14px}
+.bar{height:10px;border-radius:6px;background:var(--chip);overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:var(--pri2)}
+.back{background:none;border:0;color:var(--pri2);font-size:15px;padding:6px 2px;margin-bottom:6px;font-weight:700}
+.stale{background:#FFF3CD;color:#6B4E00;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:10px;line-height:1.6}
+.empty{text-align:center;color:var(--mute);padding:30px 0}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Écran 0 : choisir le fichier de données (mode installé) -->
+  <div id="s_file" class="lock hide">
+    <div class="box">
+      <h2>📂 ملف البيانات</h2>
+      <p id="file_msg">اختر الملف الذي صدّرته من تطبيق الحاسوب (امتداد emp) و نسخته إلى هذا الهاتف.</p>
+      <button id="file_pick" class="btn">اختيار الملف</button>
+      <div id="file_err" class="err"></div>
+      <div class="note">البيانات تبقى مشفرة على هاتفك و لا تُرسل إلى أي مكان.</div>
+    </div>
+  </div>
+
+  <!-- Écran 1 : clé de session -->
+  <div id="s_key" class="lock hide">
+    <div class="box">
+      <h2>🔑 مفتاح الجلسة</h2>
+      <p id="key_msg">أدخل المفتاح المعروض في تطبيق الحاسوب (بطاقة «تطبيق الهاتف» في الاعدادات).</p>
+      <input id="key_in" class="inp" inputmode="numeric" autocomplete="off" placeholder="0000 0000 0000" maxlength="14">
+      <div id="key_err" class="err"></div>
+      <button id="key_ok" class="btn">فتح</button>
+      <div id="key_info" class="note"></div>
+      <button class="btn alt imp">استيراد ملف بيانات جديد</button>
+    </div>
+  </div>
+
+  <!-- Écran 2 : création du PIN -->
+  <div id="s_newpin" class="lock hide">
+    <div class="box">
+      <h2>🔒 رمز PIN</h2>
+      <p>اختر رمزا سريا يحمي التطبيق في كل مرة تفتحه (6 أرقام على الأقل).</p>
+      <input id="np1" class="inp" type="password" inputmode="numeric" autocomplete="off" placeholder="الرمز الجديد">
+      <input id="np2" class="inp" type="password" inputmode="numeric" autocomplete="off" placeholder="تأكيد الرمز" style="margin-top:10px">
+      <div id="np_err" class="err"></div>
+      <button id="np_ok" class="btn">حفظ و دخول</button>
+    </div>
+  </div>
+
+  <!-- Écran 3 : saisie du PIN -->
+  <div id="s_pin" class="lock hide">
+    <div class="box">
+      <h2>🔒 التطبيق محمي</h2>
+      <p id="pin_msg">أدخل رمز PIN</p>
+      <input id="pin_in" class="inp" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN">
+      <div id="pin_err" class="err"></div>
+      <button id="pin_ok" class="btn">دخول</button>
+      <button id="pin_forgot" class="btn alt">نسيت الرمز؟ (يلزم مفتاح الجلسة)</button>
+      <button class="btn alt imp">استيراد ملف بيانات جديد</button>
+    </div>
+  </div>
+
+  <!-- Application -->
+  <div id="s_main" class="hide">
+    <div class="top">
+      <h1 id="ttl">مصلحة الكتابة المركزية<div class="sub" id="sub"></div></h1>
+      <button id="b_lock">🔒 قفل</button>
+    </div>
+    <div class="pad" id="view"></div>
+    <div class="tabs">
+      <button data-t="list" class="on"><b>👥</b>القائمة</button>
+      <button data-t="today"><b>📅</b>اليوم</button>
+      <button data-t="about"><b>ℹ️</b>حول</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="fin" class="hide">
+<script id="env" type="application/json">null</script>
+<script>
+/* ===== Chiffrement sans dépendance (SHA-256, HMAC, PBKDF2, flux HMAC) — identique côté Python ===== */
+var K256 = new Uint32Array([
+0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2]);
+var IV256 = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+var W256 = new Int32Array(64);
+function sha_compress(st, buf, off) {
+  var w = W256, i;
+  for (i = 0; i < 16; i++) w[i] = (buf[off+4*i] << 24) | (buf[off+4*i+1] << 16) | (buf[off+4*i+2] << 8) | buf[off+4*i+3];
+  sha_rounds(st, w);
+}
+function sha_rounds(st, w) {
+  var i, a, b, s0, s1;
+  for (i = 16; i < 64; i++) {
+    a = w[i-15]; b = w[i-2];
+    s0 = ((a >>> 7) | (a << 25)) ^ ((a >>> 18) | (a << 14)) ^ (a >>> 3);
+    s1 = ((b >>> 17) | (b << 15)) ^ ((b >>> 19) | (b << 13)) ^ (b >>> 10);
+    w[i] = (w[i-16] + s0 + w[i-7] + s1) | 0;
+  }
+  var A = st[0], B = st[1], C = st[2], D = st[3], E = st[4], F = st[5], G = st[6], H = st[7];
+  for (i = 0; i < 64; i++) {
+    var S1 = ((E >>> 6) | (E << 26)) ^ ((E >>> 11) | (E << 21)) ^ ((E >>> 25) | (E << 7));
+    var ch = (E & F) ^ (~E & G);
+    var t1 = (H + S1 + ch + K256[i] + w[i]) | 0;
+    var S0 = ((A >>> 2) | (A << 30)) ^ ((A >>> 13) | (A << 19)) ^ ((A >>> 22) | (A << 10));
+    var mj = (A & B) ^ (A & C) ^ (B & C);
+    var t2 = (S0 + mj) | 0;
+    H = G; G = F; F = E; E = (D + t1) | 0; D = C; C = B; B = A; A = (t1 + t2) | 0;
+  }
+  st[0] = (st[0] + A) | 0; st[1] = (st[1] + B) | 0; st[2] = (st[2] + C) | 0; st[3] = (st[3] + D) | 0;
+  st[4] = (st[4] + E) | 0; st[5] = (st[5] + F) | 0; st[6] = (st[6] + G) | 0; st[7] = (st[7] + H) | 0;
+}
+/* traite msg à partir de l'état st ; prefix = nombre d'octets déjà absorbés avant (pour la longueur) */
+function sha_finish(st, msg, prefix) {
+  var n = msg.length, full = n - (n % 64), i;
+  for (i = 0; i < full; i += 64) sha_compress(st, msg, i);
+  var rest = n - full, tail = new Uint8Array(rest + 9 <= 64 ? 64 : 128);
+  for (i = 0; i < rest; i++) tail[i] = msg[full + i];
+  tail[rest] = 0x80;
+  var bits = (prefix + n) * 8, hi = Math.floor(bits / 4294967296), lo = bits >>> 0, L = tail.length;
+  tail[L-8] = hi >>> 24; tail[L-7] = hi >>> 16; tail[L-6] = hi >>> 8; tail[L-5] = hi;
+  tail[L-4] = lo >>> 24; tail[L-3] = lo >>> 16; tail[L-2] = lo >>> 8; tail[L-1] = lo;
+  for (i = 0; i < L; i += 64) sha_compress(st, tail, i);
+  var out = new Uint8Array(32);
+  for (i = 0; i < 8; i++) { out[4*i] = st[i] >>> 24; out[4*i+1] = st[i] >>> 16; out[4*i+2] = st[i] >>> 8; out[4*i+3] = st[i]; }
+  return out;
+}
+function sha256(msg) { return sha_finish(Int32Array.from(IV256), msg, 0); }
+function hmac_init(key) {
+  if (key.length > 64) key = sha256(key);
+  var ip = new Uint8Array(64), op = new Uint8Array(64), i;
+  for (i = 0; i < 64; i++) { ip[i] = 0x36; op[i] = 0x5c; }
+  for (i = 0; i < key.length; i++) { ip[i] ^= key[i]; op[i] ^= key[i]; }
+  var si = Int32Array.from(IV256), so = Int32Array.from(IV256);
+  sha_compress(si, ip, 0); sha_compress(so, op, 0);
+  return { si: si, so: so };
+}
+function hmac(h, msg) {
+  var inner = sha_finish(Int32Array.from(h.si), msg, 64);
+  return sha_finish(Int32Array.from(h.so), inner, 64);
+}
+function hmac_key(key, msg) { return hmac(hmac_init(key), msg); }
+/* PBKDF2-HMAC-SHA256, 32 octets */
+function pbkdf2(pass, salt, iters) {
+  var h = hmac_init(pass), si = new Int32Array(8), so = new Int32Array(8), w = W256, i, j;
+  var m = new Uint8Array(salt.length + 4); m.set(salt); m[salt.length+3] = 1;
+  var u = hmac(h, m), t = new Int32Array(8), cur = new Int32Array(8);
+  for (i = 0; i < 8; i++) { cur[i] = (u[4*i] << 24) | (u[4*i+1] << 16) | (u[4*i+2] << 8) | u[4*i+3]; t[i] = cur[i]; }
+  for (j = 1; j < iters; j++) {
+    for (i = 0; i < 8; i++) { w[i] = cur[i]; si[i] = h.si[i]; }
+    w[8] = 0x80000000 | 0; for (i = 9; i < 15; i++) w[i] = 0; w[15] = 768;
+    sha_rounds(si, w);
+    for (i = 0; i < 8; i++) { w[i] = si[i]; so[i] = h.so[i]; }
+    w[8] = 0x80000000 | 0; for (i = 9; i < 15; i++) w[i] = 0; w[15] = 768;
+    sha_rounds(so, w);
+    for (i = 0; i < 8; i++) { cur[i] = so[i]; t[i] ^= so[i]; }
+  }
+  var out = new Uint8Array(32);
+  for (i = 0; i < 8; i++) { out[4*i] = t[i] >>> 24; out[4*i+1] = t[i] >>> 16; out[4*i+2] = t[i] >>> 8; out[4*i+3] = t[i]; }
+  return out;
+}
+function str2b(s) { return new TextEncoder().encode(s); }
+function b2str(b) { return new TextDecoder("utf-8").decode(b); }
+function cat() { var n = 0, i; for (i = 0; i < arguments.length; i++) n += arguments[i].length;
+  var o = new Uint8Array(n), p = 0; for (i = 0; i < arguments.length; i++) { o.set(arguments[i], p); p += arguments[i].length; } return o; }
+var B64C = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+function b64dec(s) {
+  var lut = {}, i; for (i = 0; i < 64; i++) lut[B64C.charAt(i)] = i;
+  s = s.replace(/[^A-Za-z0-9+\/]/g, ""); var n = Math.floor(s.length * 3 / 4), o = new Uint8Array(n), p = 0, acc = 0, bits = 0;
+  for (i = 0; i < s.length; i++) { acc = (acc << 6) | lut[s.charAt(i)]; bits += 6; if (bits >= 8) { bits -= 8; if (p < n) o[p++] = (acc >> bits) & 255; } }
+  return o;
+}
+function b64enc(b) {
+  var s = "", i;
+  for (i = 0; i + 2 < b.length; i += 3) { var n = (b[i] << 16) | (b[i+1] << 8) | b[i+2]; s += B64C[n >> 18] + B64C[(n >> 12) & 63] + B64C[(n >> 6) & 63] + B64C[n & 63]; }
+  var r = b.length - i;
+  if (r === 1) { var n1 = b[i] << 16; s += B64C[n1 >> 18] + B64C[(n1 >> 12) & 63] + "=="; }
+  else if (r === 2) { var n2 = (b[i] << 16) | (b[i+1] << 8); s += B64C[n2 >> 18] + B64C[(n2 >> 12) & 63] + B64C[(n2 >> 6) & 63] + "="; }
+  return s;
+}
+/* seal / open : nonce(16) | chiffré | étiquette(32). Clés dérivées : enc = HMAC(k,"enc"), mac = HMAC(k,"mac") */
+function ks_xor(encKey, nonce, data) {
+  var h = hmac_init(encKey), out = new Uint8Array(data.length), blk = new Uint8Array(16 + 4), i, j, c = 0;
+  blk.set(nonce);
+  for (i = 0; i < data.length; i += 32, c++) {
+    blk[16] = c >>> 24; blk[17] = c >>> 16; blk[18] = c >>> 8; blk[19] = c;
+    var k = hmac(h, blk), n = Math.min(32, data.length - i);
+    for (j = 0; j < n; j++) out[i + j] = data[i + j] ^ k[j];
+  }
+  return out;
+}
+function seal(key, plain, nonce) {
+  var ek = hmac_key(key, str2b("enc")), mk = hmac_key(key, str2b("mac"));
+  var ct = ks_xor(ek, nonce, plain);
+  var tag = hmac_key(mk, cat(nonce, ct));
+  return cat(nonce, ct, tag);
+}
+function unseal(key, blob) {
+  if (blob.length < 48) return null;
+  var ek = hmac_key(key, str2b("enc")), mk = hmac_key(key, str2b("mac"));
+  var nonce = blob.subarray(0, 16), ct = blob.subarray(16, blob.length - 32), tag = blob.subarray(blob.length - 32);
+  var t2 = hmac_key(mk, cat(nonce, ct)), d = 0, i;
+  for (i = 0; i < 32; i++) d |= t2[i] ^ tag[i];
+  if (d !== 0) return null;
+  return ks_xor(ek, nonce, ct);
+}
+function rand_bytes(n) { var o = new Uint8Array(n); if (typeof crypto !== "undefined" && crypto.getRandomValues) crypto.getRandomValues(o); else for (var i = 0; i < n; i++) o[i] = Math.floor(Math.random() * 256); return o; }
+
+</script>
+<script>
+(function(){
+"use strict";
+var $ = function(id){ return document.getElementById(id); };
+var ENV = null;
+try { var rawEnv = document.getElementById("env").textContent.replace(/^\s+|\s+$/g, ""); if (rawEnv && rawEnv !== "null") ENV = JSON.parse(rawEnv); } catch (e) { ENV = null; }
+var EMBEDDED = !!ENV;                       /* fichier autonome : données dans la page ; sinon : application installée */
+var ITERS = 50000;
+var DATA = null, KEY = null;
+
+/* ---------- stockage (localStorage si possible, sinon mémoire) ---------- */
+var mem = {};
+var LS = null;
+try { LS = window.localStorage; LS.setItem("t","1"); LS.removeItem("t"); } catch (e) { LS = null; }
+function sget(k){ try { return LS ? LS.getItem(k) : (mem[k] || null); } catch (e) { return mem[k] || null; } }
+function sset(k,v){ try { if (LS) LS.setItem(k,v); else mem[k]=v; } catch (e) { mem[k]=v; } }
+function sdel(k){ try { if (LS) LS.removeItem(k); } catch (e) {} delete mem[k]; }
+function state(){ try { return JSON.parse(sget("emp_state") || "{}"); } catch (e) { return {}; } }
+function save(st){ sset("emp_state", JSON.stringify(st)); }
+
+function todayStr(){ var d = new Date(); return d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0"+d.getDate()).slice(-2); }
+function show(id){ ["s_file","s_key","s_newpin","s_pin","s_main"].forEach(function(x){ $(x).classList.toggle("hide", x !== id); }); window.scrollTo(0,0); }
+function later(fn){ setTimeout(fn, 40); }
+function digits(s){ return (s || "").replace(/[٠-٩]/g, function(c){ return String(c.charCodeAt(0) - 1632); }).replace(/\D/g, ""); }
+
+
+/* ---------- fichier de données (mode installé) : IndexedDB, repli localStorage ---------- */
+function idbOpen(cb){
+  try {
+    var r = indexedDB.open("emp_db", 1);
+    r.onupgradeneeded = function(){ r.result.createObjectStore("kv"); };
+    r.onsuccess = function(){ cb(null, r.result); };
+    r.onerror = function(){ cb(r.error); };
+  } catch (e) { cb(e); }
+}
+function idbGet(key, cb){
+  idbOpen(function(err, db){
+    if (err) { cb(sget("emp_env_" + key)); return; }
+    try { var q = db.transaction("kv", "readonly").objectStore("kv").get(key); q.onsuccess = function(){ cb(q.result || sget("emp_env_" + key)); }; q.onerror = function(){ cb(null); }; }
+    catch (e) { cb(null); }
+  });
+}
+function idbSet(key, val, cb){
+  idbOpen(function(err, db){
+    if (err) { sset("emp_env_" + key, val); cb(); return; }
+    try { var tx = db.transaction("kv", "readwrite"); tx.objectStore("kv").put(val, key); tx.oncomplete = function(){ cb(); }; tx.onerror = function(){ sset("emp_env_" + key, val); cb(); }; }
+    catch (e) { sset("emp_env_" + key, val); cb(); }
+  });
+}
+function pickFile(){ $("fin").value = ""; $("fin").click(); }
+$("fin").addEventListener("change", function(){
+  var f = this.files && this.files[0]; if (!f) return;
+  var rd = new FileReader();
+  rd.onload = function(){
+    var obj = null;
+    try { obj = JSON.parse(rd.result); } catch (e) {}
+    if (!obj || obj.v !== 1 || !obj.id || !obj.salt || !obj.periods || !obj.payload) {
+      var m = "الملف غير صالح : اختر ملف emp المصدّر من التطبيق"; $("file_err").textContent = m; alert(m); return;
+    }
+    idbSet("env", rd.result, function(){ ENV = obj; ITERS = obj.iters || 50000; DATA = null; KEY = null; start(); });
+  };
+  rd.readAsText(f);
+});
+Array.prototype.forEach.call(document.querySelectorAll(".imp"), function(b){ if (EMBEDDED) b.classList.add("hide"); else b.addEventListener("click", pickFile); });
+$("file_pick").addEventListener("click", pickFile);
+
+/* ---------- 1. clé de session ---------- */
+var pendingK = null, pendingExp = null, resetPin = false;
+function showKey(msg){
+  $("key_in").value = ""; $("key_err").textContent = "";
+  if (msg) $("key_msg").textContent = msg;
+  $("key_info").textContent = "تاريخ الملف : " + ENV.exported;
+  show("s_key");
+}
+$("key_in").addEventListener("input", function(){
+  var d = digits(this.value).slice(0,12);
+  this.value = d.replace(/(\d{4})(?=\d)/g, "$1 ");
+});
+function tryKey(){
+  var code = digits($("key_in").value);
+  if (code.length !== 12) { $("key_err").textContent = "المفتاح من 12 رقما"; return; }
+  var t = todayStr(), cand = ENV.periods.filter(function(p){ return p.from <= t && t <= p.to; });
+  if (!cand.length) {
+    $("key_err").textContent = (t < ENV.periods[0].from) ? "تاريخ الهاتف سابق لمدة الملف" : "انتهت صلاحية هذا الملف : صدّر ملفا جديدا من الحاسوب";
+    return;
+  }
+  $("key_err").textContent = "جار التحقق ..."; $("key_ok").disabled = true;
+  later(function(){
+    var wk = pbkdf2(str2b(code), b64dec(ENV.salt), ITERS), found = null, i;
+    for (i = 0; i < cand.length && !found; i++) {
+      var k = unseal(wk, b64dec(cand[i].wrap));
+      if (k) found = { k: k, exp: cand[i].to };
+    }
+    $("key_ok").disabled = false;
+    if (!found) { $("key_err").textContent = "مفتاح غير صحيح"; return; }
+    pendingK = found.k; pendingExp = found.exp;
+    var st = state();
+    if (st.pin && !resetPin) askPinToStore(); else newPin();
+  });
+}
+$("key_ok").addEventListener("click", tryKey);
+$("key_in").addEventListener("keydown", function(e){ if (e.key === "Enter") tryKey(); });
+
+/* ---------- 2. création du PIN ---------- */
+function newPin(){ $("np1").value = ""; $("np2").value = ""; $("np_err").textContent = ""; show("s_newpin"); }
+$("np_ok").addEventListener("click", function(){
+  var a = digits($("np1").value), b = digits($("np2").value);
+  if (a.length < 6) { $("np_err").textContent = "6 أرقام على الأقل"; return; }
+  if (a !== b) { $("np_err").textContent = "الرمزان غير متطابقين"; return; }
+  $("np_err").textContent = "جار الحفظ ..."; $("np_ok").disabled = true;
+  later(function(){
+    var salt = rand_bytes(16), pk = pbkdf2(str2b(a), salt, ITERS);
+    var st = state();
+    st.pin = { salt: b64enc(salt), chk: b64enc(seal(pk, str2b("ok"), rand_bytes(16))) };
+    st.ex = {}; st.ex[ENV.id] = { wrap: b64enc(seal(pk, pendingK, rand_bytes(16))), exp: pendingExp };
+    st.fails = 0; save(st); resetPin = false;
+    $("np_ok").disabled = false;
+    KEY = pendingK; pendingK = null; openApp();
+  });
+});
+
+/* ---------- 3. PIN ---------- */
+function askPinToStore(){ $("pin_msg").textContent = "أدخل رمز PIN لتفعيل هذا الملف"; $("pin_in").value = ""; $("pin_err").textContent = ""; $("pin_mode").value = "store"; show("s_pin"); }
+function showPin(){ $("pin_msg").textContent = "أدخل رمز PIN"; $("pin_in").value = ""; $("pin_err").textContent = ""; $("pin_mode").value = "open"; show("s_pin"); }
+var pm = document.createElement("input"); pm.type = "hidden"; pm.id = "pin_mode"; document.body.appendChild(pm);
+function tryPin(){
+  var p = digits($("pin_in").value), st = state();
+  if (!p) return;
+  $("pin_err").textContent = "جار التحقق ..."; $("pin_ok").disabled = true;
+  later(function(){
+    var pk = pbkdf2(str2b(p), b64dec(st.pin.salt), ITERS);
+    var ok = unseal(pk, b64dec(st.pin.chk));
+    $("pin_ok").disabled = false;
+    if (!ok) {
+      st.fails = (st.fails || 0) + 1;
+      if (st.fails >= 5) { st.ex = {}; st.fails = 0; save(st); resetPin = false; showKey("تجاوزت عدد المحاولات : أدخل مفتاح الجلسة"); return; }
+      save(st); $("pin_err").textContent = "رمز خاطئ (" + (5 - st.fails) + " محاولات متبقية)"; $("pin_in").value = ""; return;
+    }
+    st.fails = 0;
+    if ($("pin_mode").value === "store") {
+      st.ex = st.ex || {}; st.ex[ENV.id] = { wrap: b64enc(seal(pk, pendingK, rand_bytes(16))), exp: pendingExp };
+      save(st); KEY = pendingK; pendingK = null; openApp(); return;
+    }
+    var ex = (st.ex || {})[ENV.id];
+    if (!ex) { save(st); showKey("هذا الملف جديد : أدخل مفتاح الجلسة"); return; }
+    if (todayStr() > ex.exp) { delete st.ex[ENV.id]; save(st); showKey("انتهت مدة الجلسة : أدخل المفتاح الجديد"); return; }
+    save(st);
+    KEY = unseal(pk, b64dec(ex.wrap));
+    if (!KEY) { delete st.ex[ENV.id]; save(st); showKey("أدخل مفتاح الجلسة"); return; }
+    openApp();
+  });
+}
+$("pin_ok").addEventListener("click", tryPin);
+$("pin_in").addEventListener("keydown", function(e){ if (e.key === "Enter") tryPin(); });
+$("pin_forgot").addEventListener("click", function(){ resetPin = true; showKey("أدخل مفتاح الجلسة ثم اختر رمزا جديدا"); });
+
+/* ---------- ouverture ---------- */
+function openApp(){
+  var plain = unseal(KEY, b64dec(ENV.payload));
+  if (!plain) { showKey("الملف تالف أو المفتاح غير صالح"); return; }
+  DATA = JSON.parse(b2str(plain));
+  prepare(); go("list"); show("s_main");
+}
+function lock(){ DATA = null; KEY = null; $("view").innerHTML = ""; showPin(); }
+$("b_lock").addEventListener("click", lock);
+var hiddenAt = 0;
+document.addEventListener("visibilitychange", function(){
+  if (document.hidden) hiddenAt = Date.now();
+  else if (DATA && hiddenAt && Date.now() - hiddenAt > 60000) lock();
+});
+
+/* ---------- données ---------- */
+var SL = { annuelle: "في اجازة سنوية", maladie: "في اجازة مرضية", stage: "في تربص", autres: "في اجازة اخرى" };
+var SC = { dispo: "#2E9E5B", annuelle: "#1E88E5", maladie: "#FB8C00", stage: "#8E24AA", autres: "#78909C" };
+var PRIO = { maladie: 0, stage: 1, annuelle: 2, autres: 3 };
+var LT = { annuelle: "اجازة سنوية", maladie: "اجازة مرضية", autres: "اسباب اخرى", stage: "تربص", permission: "رخصة استثنائية" };
+function pd(s){ var a = s.split("-"); return new Date(+a[0], +a[1]-1, +a[2]); }
+function fd(d){ return d.getFullYear() + "/" + ("0"+(d.getMonth()+1)).slice(-2) + "/" + ("0"+d.getDate()).slice(-2); }
+function addDays(d, n){ var x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; }
+function norm(s){
+  return (s || "").toString().replace(/[٠-٩]/g, function(c){ return String(c.charCodeAt(0) - 1632); })
+    .replace(/[ً-ْـ]/g, "").replace(/[أإآ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").toLowerCase();
+}
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+function prepare(){
+  var now = new Date(); now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  DATA.emps.forEach(function(e){
+    e.st = null;
+    (e.leaves || []).forEach(function(l){
+      if (l.t === "permission") return;
+      var s = pd(l.s), end = addDays(s, l.n - 1);
+      if (s <= now && now <= end) {
+        var cur = e.st;
+        if (!cur || (PRIO[l.t] < PRIO[cur.t] || (PRIO[l.t] === PRIO[cur.t] && end > cur.end))) e.st = { t: l.t, end: end };
+      }
+    });
+    e.key = norm([e.nom, e.grade, e.sifa, e.poste, e.cin, e.tel].join(" "));
+  });
+}
+function annualUsed(e, year){
+  var tot = 0;
+  (e.leaves || []).forEach(function(l){
+    if (l.t !== "annuelle") return;
+    var d = pd(l.s), left = l.n;
+    while (left > 0) {
+      var ye = new Date(d.getFullYear(), 11, 31), take = Math.min(left, Math.round((ye - d) / 86400000) + 1);
+      if (d.getFullYear() === year) tot += take;
+      left -= take; d = addDays(ye, 1);
+    }
+  });
+  return tot;
+}
+function phones(s){ var m = (s || "").match(/\+?\d[\d\s]{6,}\d/g) || []; return m.map(function(x){ return x.replace(/\s+/g, ""); }); }
+
+/* ---------- vues ---------- */
+var tab = "list", stack = [], q = "", fp = "", fs = "";
+function go(t){
+  tab = t; stack = [];
+  Array.prototype.forEach.call(document.querySelectorAll(".tabs button"), function(b){ b.classList.toggle("on", b.dataset.t === t); });
+  $("sub").textContent = "آخر تحديث للمعطيات : " + DATA.exported;
+  if (t === "list") viewList(); else if (t === "today") viewToday(); else viewAbout();
+}
+Array.prototype.forEach.call(document.querySelectorAll(".tabs button"), function(b){ b.addEventListener("click", function(){ go(b.dataset.t); }); });
+
+function avatar(e, cls){
+  return '<div class="' + cls + '">' + (e.photo ? '<img alt="" src="' + e.photo + '">' : "👤") + "</div>";
+}
+function staleBanner(){
+  var d = pd(DATA.exported.slice(0, 10)), days = Math.round((new Date() - d) / 86400000);
+  return days > 30 ? '<div class="stale">⚠ هذه المعطيات قديمة (' + days + ' يوم). صدّر ملفا جديدا من الحاسوب.</div>' : "";
+}
+function viewList(){
+  var h = staleBanner() + '<div class="search"><input id="q" type="search" placeholder="بحث : الاسم، الرتبة، ب.ت.و، الهاتف ..." value="' + esc(q) + '">' +
+    '<select id="fp"><option value="">كل الأماكن</option>' + DATA.postes.map(function(p){ return '<option' + (p === fp ? " selected" : "") + ">" + esc(p) + "</option>"; }).join("") + "</select></div>" +
+    '<div class="search"><select id="fs"><option value="">كل الحالات</option><option value="dispo"' + (fs === "dispo" ? " selected" : "") + '>مباشر</option><option value="abs"' + (fs === "abs" ? " selected" : "") + '>في اجازة / تربص</option></select></div>' +
+    '<div class="cnt" id="cnt"></div><div id="lst"></div>';
+  $("view").innerHTML = h;
+  $("q").addEventListener("input", function(){ q = this.value; fill(); });
+  $("fp").addEventListener("change", function(){ fp = this.value; fill(); });
+  $("fs").addEventListener("change", function(){ fs = this.value; fill(); });
+  fill();
+}
+function fill(){
+  var k = norm(q).trim().split(/\s+/).filter(Boolean);
+  var res = DATA.emps.filter(function(e){
+    if (fp && e.poste !== fp) return false;
+    if (fs === "dispo" && e.st) return false;
+    if (fs === "abs" && !e.st) return false;
+    return k.every(function(w){ return e.key.indexOf(w) >= 0; });
+  });
+  $("cnt").textContent = res.length + " من " + DATA.emps.length;
+  $("lst").innerHTML = res.length ? res.map(function(e){
+    return '<div class="row" data-id="' + e.id + '">' + avatar(e, "av") + '<div class="rt"><div class="n">' + esc(e.nom) + '</div><div class="g">' +
+      esc([e.grade, e.poste].filter(Boolean).join(" - ")) + '</div></div><span class="dot" style="background:' + SC[e.st ? e.st.t : "dispo"] + '"></span></div>';
+  }).join("") : '<div class="empty">لا توجد نتائج</div>';
+  Array.prototype.forEach.call($("lst").querySelectorAll(".row"), function(r){ r.addEventListener("click", function(){ viewEmp(+r.dataset.id); }); });
+}
+function find(id){ for (var i = 0; i < DATA.emps.length; i++) if (DATA.emps[i].id === id) return DATA.emps[i]; return null; }
+
+function viewEmp(id){
+  var e = find(id); if (!e) return;
+  var y = new Date().getFullYear(), used = annualUsed(e, y), left = DATA.annual - used;
+  var ph = phones(e.tel), up = phones(e.urg);
+  var h = '<button class="back" id="bk">‹ رجوع</button><div class="hero">' + avatar(e, "big") + "<h2>" + esc(e.nom) + '</h2><div class="g">' + esc([e.grade, e.sifa].filter(Boolean).join(" - ")) +
+    '</div><div class="g">' + esc(e.poste) + '</div><span class="badge" style="background:' + SC[e.st ? e.st.t : "dispo"] + '">' +
+    (e.st ? SL[e.st.t] + " - الرجوع : " + fd(addDays(e.st.end, 1)) : "✔ مباشر") + "</span>";
+  if (ph.length || up.length) {
+    h += '<div class="acts">';
+    if (ph[0]) h += '<a href="tel:' + ph[0] + '">📞 اتصال</a><a href="sms:' + ph[0] + '">✉️ رسالة</a>';
+    if (up[0]) h += '<a href="tel:' + up[0] + '">🚨 الطوارئ</a>';
+    h += "</div>";
+  }
+  h += "</div>";
+  h += '<div class="sec"><h4>رصيد الاجازة السنوية ' + y + '</h4><div class="bal"><b>' + left + "</b> يوم متبقي من " + DATA.annual + ' <small>(مستعمل ' + used + ')</small><div class="bar"><i style="width:' +
+    Math.min(100, Math.round(used * 100 / DATA.annual)) + '%"></i></div></div></div>';
+  (e.secs || []).forEach(function(s){
+    h += '<div class="sec"><h4>' + esc(s[0]) + "</h4>" + s[1].map(function(r){ return '<div class="kv"><span>' + esc(r[0]) + "</span><div>" + esc(r[1]) + "</div></div>"; }).join("") + "</div>";
+  });
+  var lv = (e.leaves || []).slice().sort(function(a, b){ return a.s < b.s ? 1 : -1; });
+  h += '<div class="sec"><h4>الاجازات و التربصات (' + lv.length + ")</h4>";
+  if (!lv.length) h += '<div class="lv"><small>لا توجد</small></div>';
+  lv.forEach(function(l){
+    var s = pd(l.s), en = addDays(s, l.n - 1);
+    h += '<div class="lv"><b>' + (LT[l.t] || l.t) + "</b> - " + l.n + " يوم<br><small>من " + fd(s) + " إلى " + fd(en) + (l.t === "permission" ? "" : " · الرجوع " + fd(addDays(en, 1))) +
+      "</small>" + (l.lieu ? "<br><small>" + esc(l.lieu) + "</small>" : "") + (l.note ? "<br><small>" + esc(l.note) + "</small>" : "") + "</div>";
+  });
+  h += "</div>";
+  $("view").innerHTML = h; window.scrollTo(0, 0);
+  $("bk").addEventListener("click", function(){ go("list"); });
+}
+function viewToday(){
+  var tot = DATA.emps.length, ab = DATA.emps.filter(function(e){ return e.st; });
+  ab.sort(function(a, b){ return a.st.end - b.st.end; });
+  var h = staleBanner() + '<div class="stats"><div class="stat"><b>' + tot + "</b><span>عدد الموظفين</span></div>" +
+    '<div class="stat"><b style="color:var(--ok)">' + (tot - ab.length) + "</b><span>مباشرون اليوم</span></div>" +
+    '<div class="stat"><b style="color:var(--warn)">' + ab.length + "</b><span>منقطعون اليوم</span></div></div>";
+  h += '<h3 class="t">المنقطعون اليوم</h3>';
+  h += ab.length ? ab.map(function(e){
+    return '<div class="row" data-id="' + e.id + '">' + avatar(e, "av") + '<div class="rt"><div class="n">' + esc(e.nom) + '</div><div class="g">' + SL[e.st.t] +
+      " · الرجوع " + fd(addDays(e.st.end, 1)) + '</div></div><span class="dot" style="background:' + SC[e.st.t] + '"></span></div>';
+  }).join("") : '<div class="empty">لا يوجد منقطعون اليوم</div>';
+  var by = {};
+  DATA.emps.forEach(function(e){ var p = e.poste || "—"; by[p] = by[p] || { n: 0, a: 0 }; by[p].n++; if (e.st) by[p].a++; });
+  h += '<h3 class="t">حسب مكان العمل</h3><div class="sec">' + Object.keys(by).map(function(p){
+    return '<div class="kv"><span style="flex:1">' + esc(p) + "</span><div style=\"flex:0 0 auto\">" + (by[p].n - by[p].a) + " / " + by[p].n + "</div></div>";
+  }).join("") + "</div>";
+  $("view").innerHTML = h;
+  Array.prototype.forEach.call($("view").querySelectorAll(".row"), function(r){ r.addEventListener("click", function(){ viewEmp(+r.dataset.id); }); });
+}
+function viewAbout(){
+  var st = state(), ex = (st.ex || {})[ENV.id];
+  $("view").innerHTML = '<div class="sec"><h4>معلومات الملف</h4>' +
+    '<div class="kv"><span>تاريخ التصدير</span><div>' + esc(DATA.exported) + "</div></div>" +
+    '<div class="kv"><span>عدد الموظفين</span><div>' + DATA.emps.length + "</div></div>" +
+    '<div class="kv"><span>الجلسة صالحة إلى</span><div>' + esc(ex ? ex.exp.replace(/-/g, "/") : "—") + "</div></div>" +
+    '<div class="kv"><span>التخزين</span><div>' + (LS ? "محلي (على الهاتف)" : "غير متاح : سيطلب المفتاح عند كل فتح") + "</div></div></div>" +
+    '<div class="box"><p>للتحديث : صدّر ملفا جديدا من الحاسوب، انسخه إلى الهاتف ثم ' + (EMBEDDED ? 'افتحه.' : 'اضغط « استيراد ملف بيانات جديد ».') + ' التطبيق لا يرسل أي معطيات عبر الانترنت.</p>' +
+    (EMBEDDED ? "" : '<button class="btn" id="ab_imp">استيراد ملف بيانات جديد</button>') + '</div>';
+  if (!EMBEDDED) $("ab_imp").addEventListener("click", pickFile);
+}
+
+/* ---------- démarrage ---------- */
+function start(){
+  if (!ENV) { $("file_err").textContent = ""; show("s_file"); return; }
+  ITERS = ENV.iters || 50000;
+  var st0 = state(), ex0 = (st0.ex || {})[ENV.id];
+  if (st0.pin && ex0 && todayStr() <= ex0.exp) showPin();
+  else if (st0.pin && ex0) { delete st0.ex[ENV.id]; save(st0); showKey("انتهت مدة الجلسة : أدخل المفتاح الجديد"); }
+  else showKey();
+}
+if (!EMBEDDED && location.protocol.indexOf("http") === 0) {      /* application installable (PWA) */
+  var l1 = document.createElement("link"); l1.rel = "manifest"; l1.href = "manifest.webmanifest"; document.head.appendChild(l1);
+  var l2 = document.createElement("link"); l2.rel = "apple-touch-icon"; l2.href = "icon-192.png"; document.head.appendChild(l2);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function(){});
+}
+if (EMBEDDED) start(); else idbGet("env", function(txt){ if (txt) { try { ENV = JSON.parse(txt); } catch (e) { ENV = null; } } start(); });
+})();
+</script>
+</body>
+</html>
